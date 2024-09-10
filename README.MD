@@ -6,11 +6,11 @@ This code will be very useful for PC technicans, benchmarks, etc. Let's say you 
 
 	python main.py 2048
 
-It will fill 2GB of RAM of your laptop. Insted of 2048 you can enter even 1MB, or 128GB, if you actually need it. That's a very useful thing for programmers/coders, because you can check how fast your app will work with a small amount of available RAM without running a lot of different apps just to fill it. And it's even more important for game developers, try it!
+It will fill 2GB of RAM of your laptop. Instead of 2048 you can enter even 1MB, or 128GB, if you actually need it. That's a very useful tool for programmers/coders, because you can check how fast your app will work with a small amount of available RAM without running a lot of different apps just to fill it. And it's even more important for game developers, try it!
 
-Inside you can also find a second variant of this app (main_second.py), but he is less powerful. His usage is also for a little different.
+Inside this repository you can also find a second variant of this app (main_second.py), but he is less powerful. His usage is also for a little different.
 
-This app is terminal-based forever, because code runned only inside terminal will be never freezed. Also it's better to get a tru results, becaue GUI can consume significant amount of RAM.
+This app is terminal-based forever, because code runned only inside terminal will be never freezed. Also it's better to get a true results, becaue GUI can consume significant amount of RAM.
 
 ## Attention!
 
