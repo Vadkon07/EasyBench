@@ -3,7 +3,7 @@ import psutil
 import sys
 import time
 
-def allocate_memory(mb, safe):
+def allocate_memory(mb, safe, refresh_time):
     # Convert MB to bytes
     bytes_to_allocate = mb * 1024 * 1024
     # Create a large list to consume memory
@@ -13,7 +13,6 @@ def allocate_memory(mb, safe):
 
     while i == 1:
         total, available, used, free, percent = ram_info()
-        time.sleep(1)
         os.system('cls' if os.name == 'nt' else 'clear')
         print(f"Allocated {mb} MB of RAM")
         print(f"Total RAM: {total / (1024 * 1024):.2f} MB")
@@ -22,6 +21,9 @@ def allocate_memory(mb, safe):
         print(f"Free RAM: {free / (1024 * 1024):.2f} MB")
         print(f"Percentage of RAM used: {percent}%")
         safe_mode(safe, percent)
+        refresh_time
+        time.sleep(refresh_time)
+
 
     return memory_hog
 
@@ -46,14 +48,15 @@ def ram_info():
     return total_ram, available_ram, used_ram, free_ram, percent_used
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print("Usage: python allocate_memory.py <amount_in_MB> <1/0>")
+    if len(sys.argv) != 4:
+        print("Usage: python allocate_memory.py <amount_in_MB> <1/0> <refresh_time_in_seconds>")
         sys.exit(1)
 
     try:
         mb = int(sys.argv[1])
         safe = int(sys.argv[2])
-        allocate_memory(mb, safe)
+        refresh_time = int(sys.argv[3])
+        allocate_memory(mb, safe, refresh_time)
     except ValueError:
         print("Please enter a valid integer for the amount of RAM to allocate.")
 
