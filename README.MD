@@ -1,27 +1,31 @@
-# RAM Filler
+# EasyBench
 
-## About app + how to use
+With this app you can benchmark any computer which you have. You can create a artificial usage of any of your PC parts, and notice how your PC will behave with it. This app is a manual benchmark, so you can set usage of your PC part (RAM, CPU) in percents or in defined value.  It's useful or if you have a very low-end PC (which can be overloaded just with one page in browser), or if you use a very powerful PC (which can't be overloaded even with 1 million of opened apps).
 
-This code will be very useful for PC technicans, benchmarks, etc. Let's say you want to fill 2GB of RAM, with a turned ON safe mode, and with a live update of usage. You clone this repository, and then enter:
+This app will be very useful for PC technicans, developers, gamers, benchmarks, etc. This app is terminal-based forever, because code runned only inside terminal will be never freezed. Also it's better to get a true results, because GUI can consume significant amount of resources.
 
-	python main.py 2048 1 0 (or instead of 0 set any amount of seconds, if you want to refresh app with delay)
 
-It will fill 2GB of RAM of your laptop. Instead of 2048 you can enter even 1MB, or 128GB, if you actually need it. That's a very useful tool for programmers/coders, because you can check how fast your app will work with a small amount of available RAM without running a lot of different apps just to fill it. And it's even more important for game developers, try it!
+## RAM BENCHMARK
 
-Inside this repository you can also find a second variant of this app (main_second.py), but he is less powerful. His usage is also for a little different.
+Let's say you want to fill 2GB of RAM, with a turned ON safe mode and with a live refresh. You clone this repository, and then run this app. In first menu you have to enter 1 (RAM benchmark). Then you will have to set some settings, as amount of MB which app will take from your RAM, safe mode ON/OFF, and refresh time.
 
-This app is terminal-based forever, because code runned only inside terminal will be never freezed. Also it's better to get a true results, becaue GUI can consume significant amount of RAM.
+I recommend to not to set, let's say **4096MB** if you at all have **1024MB** (it can cause some errors)
+
+## CPU BENCHMARK (beta version, use it on your own risk)
+
+Currently this benchmark on the earliest stage of development, so he can only fill your CPU usage to this percent, to whose you prescribed it. At all still very useful if you have a PC with Intel Core i9 999 Gen which just can't bu turned to use maximum of his power with any heavy app.
 
 ## Attention!
 
-I'm not sure about how safe this app is. As I know, fully filled RAM will not affect any parts of you computer, but probably it will just fully freeze him. Use this app without filling 1TB of RAM on your 1GB Raspberry PI! Add in one time +512MB-1GB, to find this point of affected performance in a bad way.
+**I'm not sure about how safe this app is!!!** It will better to control a temperature of your PC also with another app (as HWiNFO or Aida64).
 
-Or use:
+If you know how to use benchmarks and control resources of your pc - it will NEVER damage him, because YOU set usage of your resources in it, it's a manual benchmark.
 
-	python main.py <RAM> 1 (to turn on safe mode, or 0 to run app without him) 0
+(SOON) **With a turned ON safe mode, it will automatically shutdown application if usage of your resources will be more than 90% or if one of them will achieve critical temperature**
 
-With a turned ON safe mode, it will automatically shutdown application if usage of RAM will be more than 90%
+## CPU BENCHMARK
 
 ## To-Do
 
-I think it will be a good idea to create a full benchmark instead of RAM filler only. I'm not sure about how good is Python for this purpose it, but probably we have to try to do it. We can create an app which will fill CPU, GPU, RAM, but I think not HDD/SSD (it will destroy them very fast, do it will maximum run it for 5-10 seconds to check his speed)
+1. Add benchmarks for GPU + HDD/SSD (it will destroy them very fast, so will maximum run it for 5-10 seconds to check his speed)
+2. Safe mode in CPU benchmark

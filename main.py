@@ -2,12 +2,29 @@ import os
 import psutil
 import sys
 import time
+import multiprocessing
+
+def main():
+    print("Welcome to EasyBench! Choose one of these tools:\n")
+    print("1. RAM benchmark")
+    print("2. CPU benchmark\n")
+    tool_choice = input("Input number of tool: ")
+
+    if tool_choice == '1':
+        mb = int(input("How many MB of RAM we have to fill?: "))
+        safe = int(input("Safe mode ON (1) or OFF (0) ?: "))
+        refresh_time = float(input("Refresh time in seconds ('0' to live refresh)?: "))
+        allocate_memory(mb, safe, refresh_time)
+
+    if tool_choice == '2':
+        percentage = int(input("Enter CPU usage percentage (0-100): "))
+        duration = int(input("Enter duration in seconds: "))
+        refresh_time = float(input("Refresh time in seconds ('0' to live refresh)?: "))
+        stress_cpu(percentage, duration)
+
 
 def allocate_memory(mb, safe, refresh_time):
-    # Convert MB to bytes
-    bytes_to_allocate = mb * 1024 * 1024
-    # Create a large list to consume memory
-    memory_hog = bytearray(bytes_to_allocate)
+    memory_hog = bytearray(mb * 1024 * 1024)
 
     i = 1
 
@@ -47,16 +64,40 @@ def ram_info():
 
     return total_ram, available_ram, used_ram, free_ram, percent_used
 
+def cpu_stress(percentage):
+    while True:
+        start_time = time.time()
+        while (time.time() - start_time) < (percentage / 100.0):
+            pass
+        time.sleep((100 - percentage) / 100.0)
+
+def monitor_cpu():
+    while True:
+        usage = psutil.cpu_percent(interval=1)
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print(f"Current CPU usage: {usage}%")
+        if os.name == 'posix':  # Linux/Unix
+            temp = os.popen("sensors | grep 'Package id 0:' | awk '{print $4}'").read().strip()
+            print(f"CPU Temperature: {temp} (probably doesn't work)") #FIX IT
+            
+def stress_cpu(percentage, duration):
+    processes = []
+    for _ in range(multiprocessing.cpu_count()):
+        p = multiprocessing.Process(target=cpu_stress, args=(percentage,))
+        processes.append(p)
+        p.start()
+
+    monitor = multiprocessing.Process(target=monitor_cpu)
+    monitor.start()
+
+    time.sleep(duration)
+
+    for p in processes:
+        p.terminate()
+        p.join()  # Ensure the process has finished
+
+    monitor.terminate()
+    monitor.join()
+
 if __name__ == "__main__":
-    if len(sys.argv) != 4:
-        print("Usage: python allocate_memory.py <amount_in_MB> <1/0> <refresh_time_in_seconds>")
-        sys.exit(1)
-
-    try:
-        mb = int(sys.argv[1])
-        safe = int(sys.argv[2])
-        refresh_time = int(sys.argv[3])
-        allocate_memory(mb, safe, refresh_time)
-    except ValueError:
-        print("Please enter a valid integer for the amount of RAM to allocate.")
-
+    main()
