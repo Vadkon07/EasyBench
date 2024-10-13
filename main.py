@@ -3,11 +3,16 @@ import psutil
 import sys
 import time
 import multiprocessing
+import GPUtil
+from tabulate import tabulate
+
+#pip install setuptools, if no module named 'distutils'
 
 def main():
     print("Welcome to EasyBench! Choose one of these tools:\n")
     print("1. RAM benchmark")
-    print("2. CPU benchmark\n")
+    print("2. CPU benchmark")
+    print("3. GPU benchmark (beta) \n")
     tool_choice = input("Input number of tool: ")
 
     if tool_choice == '1':
@@ -21,6 +26,27 @@ def main():
         duration = int(input("Enter duration in seconds: "))
         refresh_time = float(input("Refresh time in seconds ('0' to live refresh)?: "))
         stress_cpu(percentage, duration)
+
+    if tool_choice == '3':
+        print_gpu_usage()
+
+def print_gpu_usage():
+    gpus = GPUtil.getGPUs()
+    gpu_list = []
+
+    for gpu in gpus:
+        gpu_list.append((
+            gpu.id,
+            gpu.name,
+            f"{gpu.load * 100:.0f}%",
+            f"{gpu.memoryUtil * 100:.0f}%",
+            f"{gpu.temperature}°C",
+            f"{gpu.memoryFree / 1024**2:.0f} MB",
+            f"{gpu.memoryUsed / 1024**2:.0f} MB",
+            f"{gpu.memoryTotal / 1024**2:.0f} MB",
+        ))
+
+    print(tabulate(gpu_list, headers=("ID", "Name", "Load", "Memory Util", "Temperature", "Free Memory", "Used Memory", "Total Memory")))
 
 
 def allocate_memory(mb, safe, refresh_time):
