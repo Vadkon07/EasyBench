@@ -23,6 +23,8 @@ I recommend to not to set, let's say **4096MB** if you at all have **1024MB** (i
 
 Currently this benchmark on the earliest stage of development, so he can only fill your CPU usage to this percent, to whose you prescribed it. At all still very useful if you have a PC with Intel Core i9 999 Gen which just can't bu turned to use maximum of his power with any heavy app.
 
+**Be sure that you have 'sensors' installed on your PC!**
+
 ## Attention!
 
 **I'm not sure about how safe this app is!!!** It will better to control a temperature of your PC also with another app (as HWiNFO or Aida64).

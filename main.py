@@ -138,9 +138,23 @@ def monitor_cpu():
         os.system('cls' if os.name == 'nt' else 'clear')
         print(f"Current CPU usage: {usage}%")
         if os.name == 'posix':  # Linux/Unix
-            temp = os.popen("sensors | grep 'Package id 0:' | awk '{print $4}'").read().strip()
-            print(f"CPU Temperature: {temp} (probably doesn't work)") #FIX IT
-            
+            try:
+                temp_output = os.popen("sensors").read()
+                print(f"Full sensors output:\n{temp_output}")
+                temp = None
+                for line in temp_output.split('\n'):
+                    if 'Tdie' in line or 'Package id 0:' in line:
+                        temp = line.split()[-2].strip('+°C')
+                        break
+                if temp:
+                    temp = float(temp)
+                    print(f"CPU Temperature: {temp}°C")
+                    if temp >= 90:
+                        print("High temperature!")
+            except Exception as e:
+                print("Failed to get temperature: ", e)
+        time.sleep(1)
+
 def stress_cpu(percentage, duration):
     processes = []
     for _ in range(multiprocessing.cpu_count()):
