@@ -4,6 +4,7 @@ import sys
 import time
 import multiprocessing
 import GPUtil
+import pyamdgpuinfo
 from tabulate import tabulate
 
 #pip install setuptools, if no module named 'distutils'
@@ -12,7 +13,9 @@ def main():
     print("Welcome to EasyBench! Choose one of these tools:\n")
     print("1. RAM benchmark")
     print("2. CPU benchmark")
-    print("3. GPU benchmark (beta) \n")
+    print("3. GPU benchmark (beta)")
+    print("4. Help")
+    print("5. Exit\n")
     tool_choice = input("Input number of tool: ")
 
     if tool_choice == '1':
@@ -28,26 +31,58 @@ def main():
         stress_cpu(percentage, duration)
 
     if tool_choice == '3':
-        print_gpu_usage()
+        refresh_time = float(input("Refresh time in seconds ('0' to live refresh)?: "))
+        print_gpu_usage(refresh_time)
 
-def print_gpu_usage():
+    if tool_choice == '4':
+        print("Q: How to exit from app if during the benchmark something went wrong?")
+        print("A: To exit from app click Ctrl + C on Linux, or Alt + F4 on Windows. Very soon we will add a hotkey to close this app.")
+
+    if tool_choice == '5':
+        os._exit(1)
+
+def clearScr():
+    if os.name == 'nt':  # For Windows
+        os.system('cls')
+    else:  # For Unix/Linux/Mac
+        os.system('clear')
+
+def print_gpu_usage(refresh_time):
+    pyamdgpuinfo.detect_gpus()
     gpus = GPUtil.getGPUs()
     gpu_list = []
 
-    for gpu in gpus:
-        gpu_list.append((
-            gpu.id,
-            gpu.name,
-            f"{gpu.load * 100:.0f}%",
-            f"{gpu.memoryUtil * 100:.0f}%",
-            f"{gpu.temperature}°C",
-            f"{gpu.memoryFree / 1024**2:.0f} MB",
-            f"{gpu.memoryUsed / 1024**2:.0f} MB",
-            f"{gpu.memoryTotal / 1024**2:.0f} MB",
-        ))
+    i = 1
 
-    print(tabulate(gpu_list, headers=("ID", "Name", "Load", "Memory Util", "Temperature", "Free Memory", "Used Memory", "Total Memory")))
+    while i == 1:
+        clearScr()
+        for gpu in gpus:
+            gpu_list.append((
+                gpu.id,
+                gpu.name,
+                f"{gpu.load * 100:.0f}%",
+                f"{gpu.memoryUtil * 100:.0f}%",
+                f"{gpu.temperature}°C",
+                f"{gpu.memoryFree / 1024**2:.0f} MB",
+                f"{gpu.memoryUsed / 1024**2:.0f} MB",
+                f"{gpu.memoryTotal / 1024**2:.0f} MB",
+            ))
 
+        for i in range(pyamdgpuinfo.detect_gpus()):
+            gpu_list.append((
+                i,
+                pyamdgpuinfo.get_gpu_name(i),
+                f"{pyamdgpuinfo.get_gpu_usage(i)}%",
+                f"{pyamdgpuinfo.get_vram_usage(i)}%",
+                f"{pyamdgpuinfo.get_gpu_temperature(i)}°C",
+                f"{pyamdgpuinfo.get_vram_free(i) / 1024**2:.0f} MB",
+                f"{pyamdgpuinfo.get_vram_used(i) / 1024**2:.0f} MB",
+                f"{pyamdgpuinfo.get_vram_size(i) / 1024**2:.0f} MB",
+            ))
+
+        print(tabulate(gpu_list, headers=("ID", "Name", "Load", "Memory Util", "Temperature", "Free Memory", "Used Memory", "Total Memory")))
+
+        time.sleep(refresh_time)
 
 def allocate_memory(mb, safe, refresh_time):
     memory_hog = bytearray(mb * 1024 * 1024)

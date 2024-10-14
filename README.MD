@@ -1,3 +1,11 @@
+<p align="center">
+  <img src="EasyBench_Logo.png" alt="App Logo"/>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/LICENSE-MIT-green"/>
+</p>
+
 # EasyBench
 
 With this app you can benchmark any computer which you have. You can create a artificial usage of any of your PC parts, and notice how your PC will behave with it. This app is a manual benchmark, so you can set usage of your PC part (RAM, CPU) in percents or in defined value.  It's useful or if you have a very low-end PC (which can be overloaded just with one page in browser), or if you use a very powerful PC (which can't be overloaded even with 1 million of opened apps).

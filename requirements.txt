@@ -1,0 +1,5 @@
+psutil
+multiprocessing
+GPUtil
+pyamdgpuinfo
+tabulate
